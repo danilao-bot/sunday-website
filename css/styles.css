@@ -1,0 +1,1253 @@
+/* ==========================================================================
+   SUNDAY OJIMA ONALO — PERSONAL BRAND WEBSITE (v2)
+   Theme: "One Day, Start to Finish" (Amber, Chalk, Ink, Forest)
+   Palette: Rebuilt, bold, zero muddy beiges. High contrast, fluid scale.
+   ========================================================================== */
+
+/* Cross-Document View Transitions (Progressive Enhancement) */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 250ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --------------------------------------------------------------------------
+   1. CSS CUSTOM PROPERTIES & TOKENS
+   -------------------------------------------------------------------------- */
+:root {
+  /* Strict 5-Tone Color System (No sand, no second beige) */
+  --amber: #F2A20C;
+  --chalk: #FBF7EC;
+  --ink: #121C26;
+  --ink-soft: #4A5663;
+  --forest: #15392C;
+
+  /* Typography */
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Figtree', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Fluid Spacing Scale (Generous whitespace: emptiness is part of the design) */
+  --section-pad-y: clamp(4.5rem, 10vw, 9.5rem);
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --container-max: 1200px;
+  --container-narrow: 820px;
+
+  /* Fluid Display Scale (Huge scale contrast, tight tracking, light-to-regular weight) */
+  --display-hero: clamp(2.75rem, 9vw, 8rem);
+  --display-xl: clamp(2.25rem, 6.5vw, 5.5rem);
+  --display-lg: clamp(1.75rem, 4.5vw, 3.5rem);
+  --display-md: clamp(1.35rem, 3vw, 2.25rem);
+
+  --body-base: clamp(1rem, 0.95rem + 0.3vw, 1.125rem); /* 16-18px */
+  --body-sm: clamp(0.875rem, 0.825rem + 0.2vw, 0.9375rem); /* ~14-15px */
+
+  /* Navigation Height */
+  --nav-h: 72px;
+
+  /* Transitions */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 200ms;
+}
+
+/* --------------------------------------------------------------------------
+   2. RESET & BASE
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 100%;
+  scroll-behavior: smooth;
+  background-color: var(--chalk);
+  color: var(--ink);
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--body-base);
+  line-height: 1.6;
+  color: var(--ink);
+  background-color: var(--chalk);
+  min-width: 280px;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+/* Accessibility: Skip Link */
+.skip-link {
+  position: absolute;
+  top: -999px;
+  left: 1rem;
+  z-index: 10000;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--ink);
+  color: var(--chalk);
+  font-weight: 600;
+  text-decoration: none;
+  border: 2px solid var(--amber);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+}
+
+/* Base Headings & Links */
+h1, h2, h3, h4, .font-serif {
+  font-family: var(--font-display);
+  font-weight: 400; /* Light-to-regular weight per v2 brief */
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: inherit;
+}
+
+p {
+  max-width: 65ch;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   3. DAY RAIL (MAKES ONE-DAY CONCEPT VISIBLE)
+   -------------------------------------------------------------------------- */
+.day-rail {
+  position: fixed;
+  top: var(--nav-h);
+  right: clamp(12px, 2vw, 32px);
+  bottom: 2rem;
+  width: 2px;
+  background-color: rgba(18, 28, 38, 0.15);
+  z-index: 800;
+  pointer-events: none;
+}
+
+.day-rail-dot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 10px;
+  height: 10px;
+  background-color: var(--amber);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--chalk);
+  will-change: transform, top;
+  transition: top 0.1s linear;
+}
+
+/* Over dark sections, ensure rail line stays visible */
+.theme-dark-view .day-rail {
+  background-color: rgba(251, 247, 236, 0.2);
+}
+.theme-dark-view .day-rail-dot {
+  box-shadow: 0 0 0 2px var(--ink);
+}
+
+/* Mobile top progress line fallback */
+.day-progress-bar {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background-color: var(--amber);
+  z-index: 1000;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+@media (max-width: 600px) {
+  .day-rail {
+    display: none;
+  }
+  .day-progress-bar {
+    display: block;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. NAVIGATION (EXACTLY SPECIFIED, ZERO CLUTTER)
+   -------------------------------------------------------------------------- */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-h);
+  z-index: 900;
+  background-color: transparent;
+  color: var(--ink);
+  transition: background-color var(--dur) var(--ease),
+              border-color var(--dur) var(--ease),
+              color var(--dur) var(--ease),
+              transform 250ms var(--ease);
+}
+
+.site-header.is-scrolled {
+  background-color: var(--chalk);
+  border-bottom: 1px solid rgba(18, 28, 38, 0.08);
+}
+
+.site-header.theme-ink {
+  background-color: var(--ink);
+  color: var(--chalk);
+  border-bottom: 1px solid rgba(251, 247, 236, 0.1);
+}
+
+.site-header.theme-forest {
+  background-color: var(--forest);
+  color: var(--chalk);
+  border-bottom: 1px solid rgba(251, 247, 236, 0.1);
+}
+
+.site-header.nav-hidden {
+  transform: translateY(-100%);
+}
+
+.nav-container {
+  max-width: var(--container-max);
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Wordmark: Single line, serif, small, NO Sunny subtitle */
+.brand-wordmark {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 2.5vw, 2.5rem);
+}
+
+.nav-links-list {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 2rem);
+  list-style: none;
+}
+
+.nav-link {
+  position: relative;
+  font-size: var(--body-sm);
+  font-weight: 500;
+  color: inherit;
+  padding: 0.25rem 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity var(--dur) ease;
+}
+
+@media (hover: hover) {
+  .nav-link:hover {
+    opacity: 0.7;
+  }
+}
+
+/* Active page indicator: small amber dot beside label (NO colliding underlines) */
+.nav-link[aria-current="page"]::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--amber);
+}
+
+/* Solid Connect button */
+.btn-connect {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 1.25rem;
+  background-color: var(--ink);
+  color: var(--chalk);
+  font-size: var(--body-sm);
+  font-weight: 600;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  transition: background-color var(--dur) ease, color var(--dur) ease;
+  white-space: nowrap;
+}
+
+.site-header.theme-ink .btn-connect,
+.site-header.theme-forest .btn-connect {
+  background-color: var(--amber);
+  color: var(--ink);
+}
+
+@media (hover: hover) {
+  .btn-connect:hover {
+    background-color: var(--amber);
+    color: var(--ink);
+  }
+  .site-header.theme-ink .btn-connect:hover,
+  .site-header.theme-forest .btn-connect:hover {
+    background-color: var(--chalk);
+    color: var(--ink);
+  }
+}
+
+/* Mobile Menu Text Button */
+.mobile-menu-btn {
+  display: none;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem;
+  font-family: var(--font-body);
+  font-size: var(--body-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: inherit;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+  .mobile-menu-btn {
+    display: flex;
+  }
+}
+
+/* Fullscreen Mobile Drawer Overlay */
+.mobile-drawer {
+  position: fixed;
+  inset: 0;
+  background-color: var(--chalk);
+  color: var(--ink);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: calc(var(--nav-h) + 1rem) var(--gutter) calc(2rem + env(safe-area-inset-bottom, 0));
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 220ms var(--ease), visibility 220ms var(--ease);
+}
+
+.mobile-drawer.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-drawer-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-h);
+  padding: 0 var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.drawer-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  list-style: none;
+  margin-top: 1rem;
+}
+
+.drawer-link {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 8vw, 3rem);
+  font-weight: 400;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.drawer-link[aria-current="page"]::after {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--amber);
+}
+
+.drawer-footer-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   5. COLOR GROUNDS & SECTION LAYOUT
+   -------------------------------------------------------------------------- */
+main {
+  width: 100%;
+}
+
+.ground-amber {
+  background-color: var(--amber);
+  color: var(--ink);
+}
+
+.ground-chalk {
+  background-color: var(--chalk);
+  color: var(--ink);
+}
+
+.ground-ink {
+  background-color: var(--ink);
+  color: var(--chalk);
+}
+
+.ground-forest {
+  background-color: var(--forest);
+  color: var(--chalk);
+}
+
+.section {
+  padding: var(--section-pad-y) 0;
+  width: 100%;
+  position: relative;
+}
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.container-narrow {
+  max-width: var(--container-narrow);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* --------------------------------------------------------------------------
+   6. HERO SECTION (SATURATED FULL-BLEED AMBER SUNRISE)
+   -------------------------------------------------------------------------- */
+.hero-v2 {
+  min-height: calc(100svh - var(--nav-h));
+  display: flex;
+  align-items: center;
+  padding-top: calc(var(--nav-h) + 2rem);
+  padding-bottom: var(--section-pad-y);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-v2-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: flex-end;
+}
+
+.hero-v2-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Huge Name: 2 lines desktop, 3 lines mobile, never overflows 280px */
+.hero-v2-name {
+  font-size: var(--display-hero);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+}
+
+.hero-v2-name .name-part {
+  display: block;
+}
+
+.hero-v2-alias {
+  font-size: var(--body-sm);
+  font-weight: 500;
+  color: var(--ink);
+  opacity: 0.85;
+}
+
+.hero-v2-line {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.5vw, 2rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--ink);
+  max-width: 44ch;
+  margin-top: 0.5rem;
+}
+
+.hero-v2-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Buttons */
+.btn-ink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.75rem 1.75rem;
+  background-color: var(--ink);
+  color: var(--chalk);
+  font-size: var(--body-sm);
+  font-weight: 600;
+  border-radius: 2px;
+  border: 1px solid var(--ink);
+  transition: opacity var(--dur) ease, background-color var(--dur) ease;
+}
+
+.btn-ink-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.75rem 1.75rem;
+  background-color: transparent;
+  color: var(--ink);
+  font-size: var(--body-sm);
+  font-weight: 600;
+  border-radius: 2px;
+  border: 1.5px solid var(--ink);
+  transition: background-color var(--dur) ease;
+}
+
+.btn-amber-fill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.75rem 2rem;
+  background-color: var(--amber);
+  color: var(--ink);
+  font-size: var(--body-sm);
+  font-weight: 700;
+  border-radius: 2px;
+  border: 1px solid var(--amber);
+}
+
+@media (hover: hover) {
+  .btn-ink:hover {
+    background-color: #000;
+  }
+  .btn-ink-outline:hover {
+    background-color: rgba(18, 28, 38, 0.08);
+  }
+  .btn-amber-fill:hover {
+    background-color: var(--chalk);
+  }
+}
+
+/* Portrait Arch Window & Flat Amber Sun Geometry */
+.hero-v2-visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.sun-disc-geom {
+  position: absolute;
+  width: clamp(260px, 38vw, 480px);
+  height: clamp(260px, 38vw, 480px);
+  background-color: #E29304; /* Tone shift within sun geometry */
+  border-radius: 50%;
+  right: -8%;
+  bottom: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Arch Doorway Window */
+.portrait-arch {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 4 / 5;
+  border-radius: 200px 200px 0 0;
+  background-color: var(--ink);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(18, 28, 38, 0.2);
+}
+
+.arch-monogram {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 8vw, 6rem);
+  font-weight: 400;
+  color: var(--chalk);
+  letter-spacing: 0.05em;
+  user-select: none;
+}
+
+.portrait-arch img[data-slot="portrait"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 860px) {
+  .hero-v2-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .hero-v2-visual {
+    order: -1;
+    justify-content: flex-start;
+  }
+  .portrait-arch {
+    max-width: 62%;
+  }
+  .sun-disc-geom {
+    width: 240px;
+    height: 240px;
+    right: 15%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. PHILOSOPHY SECTION (CHALK: MORNING)
+   -------------------------------------------------------------------------- */
+.philosophy-v2-statement {
+  font-size: var(--display-lg);
+  line-height: 1.15;
+  color: var(--ink);
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+  max-width: 22ch;
+}
+
+.philosophy-lines {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3.5vw, 3rem);
+  border-left: 2px solid var(--amber);
+  padding-left: clamp(1.5rem, 3vw, 3rem);
+}
+
+.philosophy-line-item {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 3vw, 2.25rem);
+  font-weight: 400;
+  color: var(--ink-soft);
+  transition: color var(--dur) ease;
+}
+
+.philosophy-line-item.is-active,
+.philosophy-line-item:hover {
+  color: var(--ink);
+}
+
+/* --------------------------------------------------------------------------
+   8. SIX ROLES (CHALK: TYPOGRAPHIC INDEX LIST, NOT CARDS)
+   -------------------------------------------------------------------------- */
+.roles-index {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(18, 28, 38, 0.15);
+  margin-top: 2rem;
+}
+
+.role-row {
+  border-bottom: 1px solid rgba(18, 28, 38, 0.15);
+  position: relative;
+}
+
+.role-summary {
+  display: grid;
+  grid-template-columns: 48px 1.5fr 2fr;
+  align-items: center;
+  padding: clamp(1.25rem, 2.5vw, 2rem) 0;
+  cursor: pointer;
+  list-style: none;
+  transition: padding-left var(--dur) ease;
+}
+
+.role-summary::-webkit-details-marker {
+  display: none;
+}
+
+.role-mark {
+  width: 32px;
+  height: 32px;
+  stroke: var(--ink);
+  stroke-width: 2;
+  fill: none;
+}
+
+.role-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.role-desc {
+  font-size: var(--body-base);
+  color: var(--ink-soft);
+}
+
+.role-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--amber);
+  opacity: 0;
+  transition: opacity var(--dur) ease;
+}
+
+@media (hover: hover) {
+  .role-row:hover::before,
+  .role-row[open]::before {
+    opacity: 1;
+  }
+  .role-row:hover .role-summary {
+    padding-left: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .role-summary {
+    grid-template-columns: 36px 1fr;
+    gap: 0.5rem;
+  }
+  .role-desc {
+    grid-column: 2 / -1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   9. BUSINESS SECTION (INK: MIDDAY)
+   -------------------------------------------------------------------------- */
+.business-v2-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: flex-start;
+}
+
+.business-stat-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-num-giant {
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 14vw, 11rem);
+  font-weight: 400;
+  line-height: 0.85;
+  color: var(--amber);
+  letter-spacing: -0.04em;
+}
+
+.stat-label-large {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 400;
+  color: var(--chalk);
+  margin-top: 0.75rem;
+  line-height: 1.2;
+}
+
+.business-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.fact-line {
+  font-size: var(--body-base);
+  color: var(--chalk);
+  opacity: 0.9;
+  border-left: 2px solid var(--amber);
+  padding-left: 1rem;
+}
+
+.capabilities-flow {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.5vw, 1.85rem);
+  line-height: 1.5;
+  color: var(--chalk);
+  margin: clamp(2rem, 4vw, 3.5rem) 0;
+}
+
+.capabilities-flow span {
+  color: var(--amber);
+  margin: 0 0.4rem;
+}
+
+.rule-amber-thin {
+  width: 100%;
+  height: 1px;
+  background-color: var(--amber);
+  border: none;
+  opacity: 0.85;
+  margin: clamp(2rem, 4vw, 3.5rem) 0;
+}
+
+.business-quote-line {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.5vw, 1.85rem);
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--chalk);
+  opacity: 0.95;
+  max-width: 48ch;
+}
+
+@media (max-width: 860px) {
+  .business-v2-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   10. MENTORSHIP SECTION (FOREST: AFTERNOON GIVING)
+   -------------------------------------------------------------------------- */
+.mentorship-v2-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  max-width: 840px;
+}
+
+.mentorship-v2-statement {
+  font-size: var(--display-lg);
+  line-height: 1.15;
+  color: var(--chalk);
+}
+
+.mentorship-v2-support {
+  font-size: clamp(1.125rem, 2vw, 1.35rem);
+  line-height: 1.6;
+  color: var(--chalk);
+  opacity: 0.9;
+}
+
+/* --------------------------------------------------------------------------
+   11. FAITH SECTION (CHALK: DUSK STILLNESS)
+   -------------------------------------------------------------------------- */
+.faith-v2-wrap {
+  text-align: left;
+  max-width: 900px;
+}
+
+.faith-v2-pillars {
+  font-size: clamp(2.25rem, 7vw, 5.5rem);
+  line-height: 1.1;
+  color: var(--ink);
+  letter-spacing: -0.03em;
+  margin-bottom: 2rem;
+}
+
+.faith-v2-sub {
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  color: var(--ink-soft);
+  max-width: 45ch;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   12. POETRY SECTION (INK: NIGHT, LAMP-LIT)
+   -------------------------------------------------------------------------- */
+.poetry-v2-grid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: center;
+}
+
+.book-lamp-stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sun-lamp-glow {
+  position: absolute;
+  width: clamp(240px, 35vw, 380px);
+  height: clamp(240px, 35vw, 380px);
+  background-color: rgba(242, 162, 12, 0.12); /* Flat low-opacity, NO blur */
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Typographic Designed Book Cover (Fallback & Display) */
+.book-cover-designed {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 2 / 3;
+  background-color: #0E161F;
+  border: 1px solid rgba(242, 162, 12, 0.25);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.cover-sun-arc {
+  width: 64px;
+  height: 32px;
+  border-top-left-radius: 64px;
+  border-top-right-radius: 64px;
+  background-color: var(--amber);
+}
+
+.cover-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--chalk);
+  line-height: 1.2;
+}
+
+.cover-author {
+  font-size: 0.875rem;
+  color: var(--amber);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.poetry-v2-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.poetry-seeing-stagger {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 1.5rem 0;
+  border-left: 2px solid var(--amber);
+  padding-left: 1.5rem;
+}
+
+.seeing-line {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.5vw, 1.85rem);
+  font-style: italic;
+  color: var(--chalk);
+  line-height: 1.3;
+}
+
+@media (max-width: 860px) {
+  .poetry-v2-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   13. CONNECT SECTION (AMBER: NEW SUNRISE)
+   -------------------------------------------------------------------------- */
+.connect-v2-wrap {
+  text-align: left;
+}
+
+.connect-v2-heading {
+  font-size: var(--display-xl);
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+.connect-routes-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2vw, 1.75rem);
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+.connect-route-link {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 3vw, 2.25rem);
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  transition: transform var(--dur) ease;
+}
+
+.connect-route-link::before {
+  content: "—";
+  font-family: var(--font-body);
+  font-weight: 300;
+  color: var(--ink);
+}
+
+@media (hover: hover) {
+  .connect-route-link:hover {
+    transform: translateX(8px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   14. INNER PAGES (STORY, POETRY, SPEAKING, MENTORSHIP)
+   -------------------------------------------------------------------------- */
+.page-header-simple {
+  padding-top: calc(var(--nav-h) + clamp(2rem, 6vw, 4rem));
+  padding-bottom: clamp(2rem, 4vw, 3.5rem);
+  border-bottom: 1px solid rgba(18, 28, 38, 0.1);
+}
+
+.chapter-block {
+  padding: clamp(3rem, 6vw, 5rem) 0;
+  border-bottom: 1px solid rgba(18, 28, 38, 0.1);
+}
+
+.chapter-pull-line {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  font-style: italic;
+  line-height: 1.3;
+  margin-bottom: 1.5rem;
+  color: var(--ink);
+}
+
+.ground-ink .chapter-pull-line {
+  color: var(--chalk);
+}
+
+.ground-ink .chapter-block {
+  border-bottom-color: rgba(251, 247, 236, 0.1);
+}
+
+.chapter-prose {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  font-size: var(--body-base);
+  line-height: 1.65;
+}
+
+/* Poem Excerpt Slot */
+.poem-excerpt-card {
+  background-color: #0E161F;
+  border: 1px solid rgba(242, 162, 12, 0.3);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  margin: 2rem 0;
+}
+
+.poem-excerpt-lines {
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 2vw, 1.35rem);
+  font-style: italic;
+  line-height: 1.8;
+  color: var(--chalk);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Speaking Topics List */
+.speaking-topics-simple {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 2rem 0;
+}
+
+.speaking-topic-item {
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 500;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(18, 28, 38, 0.1);
+}
+
+/* Contact Form */
+.contact-form-v2 {
+  background-color: #FFFFFF;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border: 1px solid rgba(18, 28, 38, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-field label {
+  font-size: var(--body-sm);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-body);
+  font-size: var(--body-base);
+  border: 1px solid rgba(18, 28, 38, 0.25);
+  border-radius: 2px;
+  background-color: var(--chalk);
+  min-height: 48px;
+}
+
+.form-input:focus {
+  border-color: var(--amber);
+  outline: none;
+  background-color: #FFF;
+}
+
+textarea.form-input {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.form-msg {
+  padding: 0.75rem 1rem;
+  font-size: var(--body-sm);
+  border-radius: 2px;
+  display: none;
+}
+
+.form-msg.is-error {
+  display: block;
+  background-color: #FEE2E2;
+  color: #991B1B;
+}
+
+.form-msg.is-success {
+  display: block;
+  background-color: #D1FAE5;
+  color: #065F46;
+}
+
+/* --------------------------------------------------------------------------
+   15. FOOTER (SHARED SHELL)
+   -------------------------------------------------------------------------- */
+.site-footer-v2 {
+  background-color: var(--ink);
+  color: var(--chalk);
+  padding: clamp(3rem, 6vw, 5rem) 0 2rem;
+  border-top: 1px solid rgba(251, 247, 236, 0.1);
+}
+
+.footer-v2-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 768px) {
+  .footer-v2-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.footer-v2-pillars {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  color: var(--amber);
+  margin-bottom: 1.5rem;
+}
+
+.footer-v2-naming {
+  font-size: var(--body-sm);
+  color: var(--chalk);
+  opacity: 0.85;
+}
+
+.footer-v2-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+}
+
+.footer-v2-link {
+  color: var(--chalk);
+  font-size: var(--body-sm);
+  opacity: 0.85;
+}
+
+@media (hover: hover) {
+  .footer-v2-link:hover {
+    color: var(--amber);
+    opacity: 1;
+  }
+}
+
+.footer-v2-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(251, 247, 236, 0.1);
+  font-size: 0.8125rem;
+  opacity: 0.6;
+}

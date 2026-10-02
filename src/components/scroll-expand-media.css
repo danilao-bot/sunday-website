@@ -1,0 +1,232 @@
+/* ==========================================================================
+   HERO SCROLL-EXPAND (SCROLL-EXPAND-MEDIA)
+   Strict adherence to the user's specification:
+   - Central hole reserved by h1 flex gap
+   - Sunday / Ojima Onalo slide apart via --q
+   - Photo (.sme-media) absolutely centered, grows on scroll
+   - Zero React state per frame
+   ========================================================================== */
+
+/* Track: scroll distance */
+.sme-track {
+  position: relative;
+  width: 100%;
+  height: 260svh;
+  background-color: var(--amber);
+  overflow-x: clip;
+}
+
+@media (max-height: 600px) {
+  .sme-track {
+    height: 220svh;
+  }
+}
+
+/* Stage: sticky 100svh */
+.sme-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--amber);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  --p: 0;
+  --q: 0;
+  --w0: min(62vw, 300px);
+  --h0: calc(var(--w0) * 1.25);
+}
+
+/* Geometric Sun Disc */
+.sme-sun {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(calc(1 - var(--p) * 0.25));
+  width: clamp(280px, 42vw, 520px);
+  height: clamp(280px, 42vw, 520px);
+  border-radius: 50%;
+  background-color: #E29304;
+  opacity: calc(1 - var(--p) * 0.7);
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform, opacity;
+}
+
+/* H1: absolute inset-0, display flex, centers the hole */
+.sme-title {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+/* Halves: BOTH get flex: 1 1 0 and min-width: 0 so hole is perfectly centered */
+.sme-half {
+  flex: 1 1 0;
+  min-width: 0;
+  will-change: transform, opacity;
+}
+
+/* Desktop (900px and up) */
+@media (min-width: 900px) {
+  .sme-title {
+    flex-direction: row;
+    gap: calc(var(--w0) + 3rem);
+    padding: 0 2rem;
+    font-size: clamp(3rem, 8vw, 8rem);
+  }
+
+  .sme-half-first {
+    text-align: right;
+    transform: translateX(calc(var(--q) * -70vw));
+    opacity: calc(1 - var(--q));
+  }
+
+  .sme-half-second {
+    text-align: left;
+    transform: translateX(calc(var(--q) * 70vw));
+    opacity: calc(1 - var(--q));
+    max-width: 440px;
+  }
+}
+
+/* Mobile (under 900px) */
+@media (max-width: 899px) {
+  .sme-title {
+    flex-direction: column;
+    gap: calc(var(--h0) + 2.25rem);
+    padding: 0 1rem;
+    font-size: clamp(2.75rem, 12vw, 5rem);
+    text-align: center;
+  }
+
+  .sme-half {
+    max-width: 92vw;
+  }
+
+  .sme-half-first {
+    transform: translateY(calc(var(--q) * -50vh));
+    opacity: calc(1 - var(--q));
+  }
+
+  .sme-half-second {
+    transform: translateY(calc(var(--q) * 50vh));
+    opacity: calc(1 - var(--q));
+  }
+}
+
+/* Landscape short phones */
+@media (max-height: 500px) {
+  .sme-title {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+  }
+}
+
+/* Photo container (.sme-media): absolute center, above title */
+.sme-media {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  overflow: hidden;
+  background-color: var(--ink);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  will-change: width, height, border-radius;
+}
+
+.sme-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 38%;
+  display: block;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Dark overlay for readability */
+.sme-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: var(--ink);
+  pointer-events: none;
+  opacity: calc(max(0, var(--p) - 0.6) * 2.2);
+}
+
+/* Lower third content */
+.sme-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--chalk);
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+@media (min-width: 640px) {
+  .sme-content {
+    padding: 2.5rem;
+  }
+}
+
+.sme-stage[data-revealed="true"] .sme-content {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .sme-track {
+    height: auto !important;
+  }
+  .sme-stage {
+    position: relative !important;
+    height: auto !important;
+    min-height: 100svh;
+  }
+  .sme-title {
+    display: none !important;
+  }
+  .sme-media {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    width: min(92vw, 1100px) !important;
+    height: min(82svh, 750px) !important;
+    border-radius: 12px !important;
+    margin: 2rem auto;
+  }
+  .sme-content {
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+  .sme-sun {
+    display: none !important;
+  }
+}

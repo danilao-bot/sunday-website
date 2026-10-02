@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --amber: #F2A20C;
+  --chalk: #FBF7EC;
+  --ink: #0F1A24;
+  --ink-soft: #4A5663;
+  --royal: #1E40C8;
+
+  --nav-h: 72px;
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --container-max: 1200px;
+  --container-narrow: 840px;
+
+  --section-pad: clamp(4.5rem, 10vw, 9.5rem);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--chalk);
+  color: var(--ink);
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', system-ui, sans-serif;
+  background-color: var(--chalk);
+  color: var(--ink);
+  min-width: 280px;
+  overflow-x: clip;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+}
+
+/* Typography Defaults */
+h1, h2, h3, h4, .font-serif {
+  font-family: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+p {
+  max-width: 68ch;
+}
+
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   DAY RAIL PROGRESS
+   -------------------------------------------------------------------------- */
+.day-rail {
+  position: fixed;
+  top: var(--nav-h);
+  right: clamp(12px, 2vw, 32px);
+  bottom: 2rem;
+  width: 2px;
+  background-color: rgba(15, 26, 36, 0.15);
+  z-index: 800;
+  pointer-events: none;
+}
+
+.day-rail-dot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 10px;
+  height: 10px;
+  background-color: var(--amber);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--chalk);
+  will-change: top;
+}
+
+.day-progress-bar {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background-color: var(--amber);
+  z-index: 1000;
+  width: 0%;
+}
+
+@media (max-width: 600px) {
+  .day-rail {
+    display: none;
+  }
+  .day-progress-bar {
+    display: block;
+  }
+}

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <style>
+      .bg { fill: #F5EEDD; }
+      .sun { fill: #E9A23B; }
+      .title { font-family: 'Fraunces', Georgia, serif; font-size: 56px; font-weight: 700; fill: #1C2733; }
+      .alias { font-family: 'Figtree', system-ui, sans-serif; font-size: 24px; font-weight: 500; fill: #8A4B0F; }
+      .tagline { font-family: 'Fraunces', Georgia, serif; font-size: 32px; font-style: italic; fill: #1C2733; }
+      .roles { font-family: 'Figtree', system-ui, sans-serif; font-size: 20px; font-weight: 600; fill: #1E3B32; letter-spacing: 1px; }
+      .pillars { font-family: 'Fraunces', Georgia, serif; font-size: 22px; fill: #8A4B0F; }
+      .horizon { stroke: #8A4B0F; stroke-width: 2; }
+    </style>
+  </defs>
+  
+  <rect width="1200" height="630" class="bg"/>
+  
+  <!-- Large amber sun disc rising behind right side -->
+  <circle cx="1000" cy="400" r="320" class="sun"/>
+  <rect x="700" y="440" width="500" height="190" fill="#F5EEDD"/>
+  <line x1="0" y1="440" x2="1200" y2="440" class="horizon" opacity="0.3"/>
+  
+  <g transform="translate(100, 140)">
+    <text x="0" y="0" class="title">Sunday Ojima Onalo</text>
+    <text x="0" y="46" class="alias">Known professionally and creatively as Sunny Ojima Onalo</text>
+    <text x="0" y="110" class="roles">Businessman • Poet • Speaker • Mentor • Sportsman • Family Man</text>
+    <text x="0" y="180" class="tagline">"A Life of Purpose, Possibility and Positive Impact"</text>
+    <text x="0" y="340" class="pillars">God. Family. Work. Service. Purpose.</text>
+  </g>
+</svg>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" width="600" height="900">
+  <defs>
+    <style>
+      .bg { fill: #1C2733; }
+      .sun { fill: #E9A23B; }
+      .title { font-family: 'Fraunces', Georgia, serif; font-size: 34px; font-weight: 700; fill: #F5EEDD; text-anchor: middle; }
+      .byline { font-family: 'Fraunces', Georgia, serif; font-size: 22px; font-style: italic; fill: #E9A23B; text-anchor: middle; }
+      .author { font-family: 'Fraunces', Georgia, serif; font-size: 26px; font-weight: 600; fill: #F5EEDD; text-anchor: middle; letter-spacing: 1px; }
+      .tag { font-family: 'Figtree', system-ui, sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 3px; fill: #E8DCC2; text-anchor: middle; text-transform: uppercase; }
+      .rule { stroke: #E9A23B; stroke-width: 1.5; opacity: 0.7; }
+      .badge-bg { fill: rgba(233, 162, 59, 0.15); stroke: #E9A23B; stroke-width: 1; stroke-dasharray: 4 4; }
+      .badge-text { font-family: 'Figtree', system-ui, sans-serif; font-size: 13px; fill: #F5EEDD; text-anchor: middle; }
+    </style>
+  </defs>
+  
+  <!-- Book ground -->
+  <rect width="600" height="900" class="bg"/>
+  
+  <!-- Inner border frame -->
+  <rect x="30" y="30" width="540" height="840" fill="none" stroke="#E9A23B" stroke-width="1.5" opacity="0.35"/>
+  
+  <!-- Sun motif on cover -->
+  <circle cx="300" cy="380" r="140" class="sun" opacity="0.9"/>
+  <rect x="100" y="380" width="400" height="150" fill="#1C2733"/>
+  <line x1="120" y1="380" x2="480" y2="380" class="rule"/>
+  
+  <!-- Typography on cover -->
+  <text x="300" y="140" class="tag">A Collection of Poetry</text>
+  
+  <text x="300" y="240" class="title">Poems</text>
+  <text x="300" y="280" class="byline">by</text>
+  <text x="300" y="330" class="author">Sunny Ojima Onalo</text>
+  
+  <text x="300" y="440" class="badge-text" font-style="italic" font-size="16px">Words From a Life Fully Lived</text>
+  
+  <!-- Placeholder note at bottom -->
+  <rect x="120" y="740" width="360" height="64" rx="4" class="badge-bg"/>
+  <text x="300" y="766" class="badge-text" font-weight="600">BOOK COVER PLACEHOLDER</text>
+  <text x="300" y="788" class="badge-text" opacity="0.75" font-size="12px">Aspect Ratio 2:3 • Available on Amazon</text>
+</svg>
